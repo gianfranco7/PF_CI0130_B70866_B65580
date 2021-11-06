@@ -1,2 +1,16 @@
-# PF_CI0130_B70866_B65580
-Repositorio para el proyecto final del curso CI-0130
+# Simulacion de un sistema multiservidor
+
+## Definicion del problema
+
+## Introduccion de variables importantes
+
+## Construccion del modelo
+
+## Especificacion de valores a ser probados
+
+## Conduccion de la simulacion
+
+## Examinacion de resultados
+
+## Seleccionar el curso de accion
+
