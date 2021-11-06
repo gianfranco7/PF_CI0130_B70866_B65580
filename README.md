@@ -1,16 +1,20 @@
 # Simulacion de un sistema multiservidor
 
-## Definicion del problema
+## Definición del problema
 
-## Introduccion de variables importantes
+## Introducción de variables importantes
 
-## Construccion del modelo
+**Variables importantes para la simulación:**
 
-## Especificacion de valores a ser probados
 
-## Conduccion de la simulacion
 
-## Examinacion de resultados
+## Construcción del modelo
 
-## Seleccionar el curso de accion
+## Especificación de valores a ser probados
+
+## Conducción de la simulación
+
+## Revisión de resultados
+
+## Seleccionar el curso de acción
 
