@@ -1,6 +1,10 @@
 # Simulacion de un sistema multiservidor
 
 ## Definición del problema
+**Eventos de la simulación:**
+* Llegada de un cliente
+* Atencion de un cliente
+* Salida de un cliente
 
 ## Introducción de variables importantes
 
