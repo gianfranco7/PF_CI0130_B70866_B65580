@@ -13,7 +13,7 @@ from Funciones import *
 OPENING_TIME = 0
 SIMULATION_HOURS = 10
 GLOBAL_TIME = OPENING_TIME
-WAIT_TRESHOLD = 6
+WAIT_THRESHOLD = 6
 REJECTED_JOBS = 0
 
 
@@ -44,6 +44,25 @@ for interarrival in interarrival_time:
     
 
     #Cambiar a multiservidor
+
+    '''
+    Idea:
+
+    Iteracion 1:
+    Usar un array con tiempos finales,
+    asignar proceso a servidor con tiempo final mas bajo.
+
+    Iteracion 2:
+    Intentar implementar un threshold para 
+    poder sacar los jobs que tarden mas de 6 minutos
+    '''
+
+
+    min_index = servers.index(min(servers))
+
+
+
+
     if arrival_time > last_final_time:    #Cajero desocupado
         init_time = arrival_time
     else:
@@ -54,6 +73,11 @@ for interarrival in interarrival_time:
     service_time = rd.uniform(3, 5)
 
     final_time = init_time + service_time
+    
+    
+    servers[min_index] = final_time
+    print(min_index)
+    
     #Fin de cambio a multiservidor
 
 
