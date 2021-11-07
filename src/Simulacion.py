@@ -39,11 +39,12 @@ global_times_list = []
 # Loop de simulacion
 for interarrival in interarrival_time:
 
+    #Calculo de los tiempos de llegada a partir de 
+    # los tiempos entre arrivos
     arrival_time = interarrival + last_arrival_time
-    last_arrival_time = arrival_time    
+    last_arrival_time = arrival_time
     
 
-    #Cambiar a multiservidor
 
     '''
     Idea:
@@ -56,18 +57,23 @@ for interarrival in interarrival_time:
     Intentar implementar un threshold para 
     poder sacar los jobs que tarden mas de 6 minutos
     '''
-
+    #Teoria:
+    #El cajero con tiempo mas pequeño
+    #Va a estar vacio o será el proximo 
+    #En desocuparse
 
     min_index = servers.index(min(servers))
 
-
-
-
-    if arrival_time > last_final_time:    #Cajero desocupado
+    #Entonces, esto deberá bastar para seleccionar el servidor
+    if arrival_time > servers[min_index]:
         init_time = arrival_time
     else:
-        init_time = last_final_time
+        init_time = servers[min_index]
 
+
+    #Ahora, es necesario elegir una funcion
+    #Que nos genere los valores para
+    #Tiempo de servicio de acuerdo al servidor
     wait_time = init_time - arrival_time
 
     service_time = rd.uniform(3, 5)
@@ -75,16 +81,16 @@ for interarrival in interarrival_time:
     final_time = init_time + service_time
     
     
+    #Ajuste del tiempo final en el servidor 
+    # que fue utilizado para la ejecucion actual
     servers[min_index] = final_time
-    print(min_index)
     
-    #Fin de cambio a multiservidor
-
-
+    #Ajuste al tiempo global - ERROR QUE ESTOY HACIENDO??
+    #ESTE ES EL TIEMPO EN EL SISTEMA NO EL GLOBAL
     GLOBAL_TIME += final_time - arrival_time
 
     
-
+    #Recoleccion de datos para estadisticas
     interarrival_times_list.append(interarrival)
     arrival_times_list.append(arrival_time)
     wait_times_list.append(wait_time)
