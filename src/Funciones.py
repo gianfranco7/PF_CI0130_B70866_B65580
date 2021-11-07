@@ -1,7 +1,8 @@
 import math
 import random as rd
-import numpy as np
-import scipy as sc
+
+from pandas.tseries import frequencies
+from scipy import stats as sp
 
 #Generacion de un numero aleatorio basado en la distribución
 #De Poisson utilizando una funcion de densidad acumulativa inversa
@@ -11,7 +12,7 @@ def inverseCDF(t, _lambda):
 
 
 #Generacion de tiempos entre llegadas en minutos de acuerdo a la cantidad de horas dada
-def interarrival_time_generator(_lambda):
+def exponential_generator(_lambda):
     r = rd.random()
     inter_arrival_time = inverseCDF(r, _lambda)
     return inter_arrival_time
@@ -22,7 +23,7 @@ def interarrival_time_generator(_lambda):
 def interarrival_times(t, _lambda):
     times = []
     while(True):
-        inter_time = interarrival_time_generator(_lambda)
+        inter_time = exponential_generator(_lambda)
 
         if inter_time + sum(times) > t:
             break
@@ -31,19 +32,28 @@ def interarrival_times(t, _lambda):
     return times
 
 
+#def gamma_random(alpha, lambd):
+#    rand_num = rd.random()
+#    rand_num = 
+#    return rand_num
+
 
 #Creacion de tiempo de servicio dependiendo del servidor a usar
 def service_time_fromID(id):
-    if id == 1:
-        r = np.random.gamma(7,1/3)
+    if id == 0:
+        #r = np.random.gamma(7,1/3)
+        r = sp.gamma.pdf(7, 1/3)
         
-    elif id == 2:
-        r = np.random.gamma(5,1/2)
+    elif id == 1:
+        #r = np.random.gamma(5,1/2)
+        r = sp.gamma.pdf(5,1/2)
     
-    elif id == 3:
-        r = np.random.exponential(1/0.3)
+    elif id == 2:
+        #r = np.random.exponential(1/0.3)
+        r = exponential_generator(1/0.3)
 
-    elif id == 4:
+    elif id == 3:
+        #r = rd.uniform(4,9)
         r = rd.uniform(4,9)
 
-    return r
+    return r / 60
