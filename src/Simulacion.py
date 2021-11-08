@@ -103,3 +103,11 @@ for i in range(SIMULATION_RUNS):
     })
 
     RUN_DATAFRAMES.append(df)
+
+ndf = RUN_DATAFRAMES[0]
+
+for d in RUN_DATAFRAMES[1:-1]:
+    ndf = ndf.append(d, ignore_index = True)
+
+
+ndf.to_csv(r'Dataframes.csv')
