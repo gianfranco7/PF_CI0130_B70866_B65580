@@ -1,9 +1,8 @@
 import math
 import random as rd
-
-from pandas.tseries import frequencies
-from scipy import stats as sp
+import statistics
 import numpy as np
+import pandas as pd
 
 #Generacion de un numero aleatorio basado en la distribución
 #De Poisson utilizando una funcion de densidad acumulativa inversa
@@ -52,11 +51,18 @@ def service_time_fromID(id):
 
     return r / 60
 
-
-#        l = []
-#        for i in range(0, 1000):
-#            x = service_time_fromID(1)
-#            print(x)
-#            l.append(x)
-#        import statistics
-#        print(statistics.mean(l))
+def get_mean_dataset(dataset_list, range):
+    meanDataframe = pd.DataFrame(index = np.arange(range), columns=['Mean Interarrival', 'Mean Wait Time', 'Max Wait Time',
+     'Mean Service Time', 'Mean System Time', 'Overtime Jobs'])
+    index = 0
+    for df in dataset_list:
+        interarrival_mean = statistics.mean(df['Interarrival'])
+        wait_time_mean = statistics.mean(df['Wait Time'])
+        max_wait_time = max(df['Wait Time'])
+        service_time_mean = statistics.mean(df['Service Time'])
+        system_time_mean = statistics.mean(df['System Time'])    
+        overtime = sum(map(lambda x : x > 10.05, df['Final Time']))
+        meanDataframe.loc[index] = [interarrival_mean, wait_time_mean, max_wait_time, 
+         service_time_mean, system_time_mean, overtime]
+        index += 1
+    return meanDataframe
