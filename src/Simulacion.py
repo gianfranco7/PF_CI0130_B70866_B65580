@@ -6,7 +6,7 @@ from Funciones import *
 SIMULATION_RUNS = 1000
 SIMULATION_HOURS = 10
 WAIT_THRESHOLD = 6 / 60
-ARRIVAL_TIMES = 30
+AVERAGE_INTERARRIVAL_TIMES = 30
 REJECTED_JOBS = 0
 
 RUN_DATAFRAMES = []
@@ -20,7 +20,7 @@ for i in range(SIMULATION_RUNS):
     servers_last_finished_times = [0, 0, 0, 0]
     number_of_works_by_server = [0, 0, 0, 0]
     last_arrival_time = 0
-    interarrival_time = interarrival_times(SIMULATION_HOURS, ARRIVAL_TIMES)
+    interarrival_time = interarrival_times(SIMULATION_HOURS, AVERAGE_INTERARRIVAL_TIMES)
 
     interarrival_times_list = []
     arrival_times_list = []
@@ -98,16 +98,19 @@ for i in range(SIMULATION_RUNS):
     RUN_DATAFRAMES.append(df)
 
 
+
+
 meanDataframe = get_mean_dataset(RUN_DATAFRAMES, SIMULATION_RUNS)
+mean_service_time = statistics.mean(meanDataframe['Mean Service Time'])
 
 #Expected waiting time for a randomly selected job
-expected_waiting_time = statistics.mean(meanDataframe['Mean Wait Time'])
+expected_waiting_time = statistics.mean(meanDataframe['Mean Wait Time']) # Posible Lq / lambda pero los resultados estan dando similares
 
 #Expected response time
 expected_response_time = statistics.mean(meanDataframe['Mean System Time'])
 
 #Expected Queue length (Lq) = (Waiting queue)Wq * lambda
-expected_queue_length = expected_waiting_time * 30
+expected_queue_length = Lq(mean_service_time ** -1, AVERAGE_INTERARRIVAL_TIMES, 4)
 
 #Expected maximum waiting time
 expected_max_waiting_time = statistics.mean(meanDataframe['Max Wait Time'])
@@ -116,8 +119,10 @@ expected_max_waiting_time = statistics.mean(meanDataframe['Max Wait Time'])
 
 
 #Probability that at least one server is available
+prob_one_server = Pn(mean_service_time ** -1, AVERAGE_INTERARRIVAL_TIMES, 4, 1)
 
 #Probability that at least two servers are available
+prob_two_servers = Pn(mean_service_time ** -1, AVERAGE_INTERARRIVAL_TIMES, 4, 2)
 
 #Number of jobs processed by each server
 mean_server_jobs = [w / SIMULATION_RUNS for w in work_sum]
@@ -135,14 +140,13 @@ expected_rejected_jobs = REJECTED_JOBS * 100 / sum(work_sum)
 
 data = f'''-----------------------------------------------------------------------------------------------------
 
-                               ANALISIS BASE
+                            ANALISIS ESTADISTICO DE LA SIMULACION
 Tiempo de espera promedio para un trabajo seleccionado aleatoriamente:      {expected_waiting_time:.4f}
 Tiempo de respuesta esperado:                                               {expected_response_time:.4f}
 Tamaño de cola esperado:                                                    {expected_queue_length:.4f}
 Tiempo de espera maximo esperado en un día de 10 horas:                     {expected_max_waiting_time:.4f}
-Tamaño maximo esperado de la cola en un dia de 10 horas:                               
-Probabilidad de que al menos un servidor se encuentre disponible:
-Probabilidad de que al menos 2 servidores se encuentren disponibles:
+Probabilidad de que al menos un servidor se encuentre disponible:           {prob_one_server:.4f}
+Probabilidad de que al menos 2 servidores se encuentren disponibles:        {prob_two_servers:.4f}
 Cantidad esperada de trabajos procesados por cada servidor:                 I: {mean_server_jobs[0]:.4f}   II: {mean_server_jobs[1]:.4f}   III: {mean_server_jobs[2]:.4f}   IV: {mean_server_jobs[3]:.4f} 
 Tiempo que cada servidor se encuentra inactivo durante el día:              I: {expected_idle_time[0]:.4f}   II: {expected_idle_time[1]:.4f}   III: {expected_idle_time[2]:.4f}   IV: {expected_idle_time[3]:.4f}
 Cantidad de trabajos aun en el sistema a las 6:03pm:                        {mean_job_overtime:.4f}
@@ -151,3 +155,5 @@ Porcentage de trabajos que abandonan la cola prematuramente:                {exp
 -----------------------------------------------------------------------------------------------------'''
 
 print(data)
+
+meanDataframe.to_csv('Dataframe.csv')
