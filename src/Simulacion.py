@@ -1,3 +1,4 @@
+import random
 import statistics
 import pandas as pd
 from Funciones import *
@@ -157,3 +158,5 @@ Porcentage de trabajos que abandonan la cola prematuramente:                {exp
 print(data)
 
 meanDataframe.to_csv('Dataframe.csv')
+oneDayDF = random.choice(RUN_DATAFRAMES)
+oneDayDF.to_csv('1-dayDF.csv')
